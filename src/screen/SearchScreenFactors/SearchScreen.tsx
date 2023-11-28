@@ -1,7 +1,8 @@
 import React from 'react';
 import {Platform} from 'react-native';
 import styled from 'styled-components/native';
-import {deviceWidth} from './MainScreen';
+import DeviceDimensions from '../../utils/DeviceDimensions';
+const deviceWidth = DeviceDimensions.getInstance().getWidth();
 
 export default function SearchScreen({navigation}: any) {
   return (
