@@ -2,7 +2,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeBaseProvider} from 'native-base';
 import React from 'react';
-import ChartScreen from './src/screen/ChartScreen';
+import ChartScreen from './src/screen/ChartScreenFactors/ChartScreen';
 import MainScreen from './src/screen/MainScreen';
 import SearchScreen from './src/screen/SearchScreen';
 

@@ -33,7 +33,7 @@ export default function MainScreen({navigation}: any) {
         <ChartText>인기차트</ChartText>
         <HStack>
           {musics.map(item => (
-            <MusicChartContainer key={item.title}>
+            <MusicChartContainer key={item.rank}>
               <RankText>{item.rank}위</RankText>
               <MusicChart source={item.path} />
               <TitleText>{item.title}</TitleText>
@@ -54,7 +54,6 @@ export default function MainScreen({navigation}: any) {
 }
 
 export const MainContainer = styled.View`
-  align-items: center;
   background-color: white;
   flex: 1;
 `;
@@ -66,6 +65,7 @@ const AlbumImageContainer = styled.ImageBackground`
 const ChartContainer = styled.View`
   padding-horizontal: ${deviceWidth * 0.05}px;
   width: ${deviceWidth}px;
+  margin-bottom: ${deviceWidth * 0.1}px;
 `;
 const ChartText = styled.Text`
   font-size: ${deviceWidth * 0.05}px;
@@ -82,6 +82,7 @@ const MusicChartContainer = styled.View`
 const MusicChart = styled.Image`
   width: 100%;
   height: 100%;
+  margin-bottom: ${deviceWidth * 0.02}px;
 `;
 const RankText = styled.Text`
   font-size: ${deviceWidth * 0.05}px;
@@ -101,6 +102,7 @@ const SingerText = styled.Text`
 const ButtonContainer = styled.View`
   width: ${deviceWidth * 0.9}px;
   flex-direction: row;
+  align-self: center;
   justify-content: space-around;
 `;
 const Button = styled.TouchableOpacity`
