@@ -1,6 +1,7 @@
 import {HStack, VStack} from 'native-base';
 import React from 'react';
 import {Platform} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
 import DeviceDimensions from '../../../utils/DeviceDimensions';
 const deviceWidth = DeviceDimensions.getInstance().getWidth();
@@ -33,7 +34,10 @@ const Chart = ({data}: ChartProps) => {
               </HStack>
               <SingerNTypeContainer>
                 <SingerText>{item.singer}</SingerText>
-                <TypeContainer>
+                <TypeContainer
+                  start={{x: 0, y: 1}}
+                  end={{x: 1, y: 0}}
+                  colors={['#87CEEB', '#98FF98']}>
                   <TypeText>{item.type}</TypeText>
                 </TypeContainer>
               </SingerNTypeContainer>
@@ -99,7 +103,7 @@ const SingerText = styled.Text`
   font-weight: 700;
   color: #a0a0a0;
 `;
-const TypeContainer = styled.View`
+const TypeContainer = styled(LinearGradient)`
   justify-content: center;
   align-items: center;
   border-radius: ${deviceWidth * 0.1}px;

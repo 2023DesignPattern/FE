@@ -1,14 +1,13 @@
 import {PayloadAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 // 비동기 액션 생성자
-// 비동기 액션 생성자
 export const fetchMusic = createAsyncThunk(
   'music/fetchMusic',
   async (chartType: string) => {
     const url =
       chartType === 'popular'
-        ? 'http://192.168.45.180:8080/api/music'
-        : 'http://192.168.45.180:8080/api/music';
+        ? 'http://10.210.148.205:8080/api/music/popular'
+        : 'http://10.210.148.205:8080/api/music';
     const response = await fetch(url);
     const json = await response.json();
     return json;

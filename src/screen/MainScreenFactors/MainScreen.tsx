@@ -17,13 +17,13 @@ export default function MainScreen({navigation}: any) {
   ];
   const musics = [
     {
-      path: require('../../../public/Perfect_Night.png'),
+      path: require('../../../public/10001.png'),
       rank: 1,
-      title: 'Perfect_Night',
+      title: 'Perfect Night',
       singer: '르세라핌',
     },
     {
-      path: require('../../../public/Drama.png'),
+      path: require('../../../public/10002.png'),
       rank: 2,
       title: 'Drama',
       singer: 'aespa',
