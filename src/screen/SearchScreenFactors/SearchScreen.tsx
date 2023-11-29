@@ -1,26 +1,23 @@
-import React, {useState} from 'react';
-import {FlatList, Platform, TextInput} from 'react-native';
+import React, {useEffect} from 'react';
+import {FlatList, Platform} from 'react-native';
 import {LinearGradient} from 'react-native-linear-gradient';
+import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components/native';
+import {
+  fetchMusicBySearchType,
+  setSearchType,
+} from '../../features/search/searchSlice';
 import DeviceDimensions from '../../utils/DeviceDimensions';
 import {MainContainer} from '../MainScreenFactors/MainScreen';
+import RadioButton from './Components/RadioButton';
+import SearchBox from './Components/SearchBox';
 const deviceWidth = DeviceDimensions.getInstance().getWidth();
 
-const RadioButton = ({label, value, selectedValue, onValueChange, isLast}) => (
-  <RadioButtonWrapper
-    onPress={() => onValueChange(value)}
-    selected={selectedValue === value}
-    isLast={isLast}>
-    <RadioButtonText selected={selectedValue === value}>
-      {label}
-    </RadioButtonText>
-  </RadioButtonWrapper>
-);
-
 const SearchScreen = () => {
-  const [searchType, setSearchType] = useState('title');
-  const [searchInput, setSearchInput] = useState('');
-  const [searchResult, setSearchResult] = useState([]);
+  const dispatch = useDispatch();
+  const searchType = useSelector(state => state.search.searchType);
+  const searchInput = useSelector(state => state.search.searchInput);
+  const searchResult = useSelector(state => state.search.searchResult);
   const images = {
     10001: require('../../../public/10001.png'),
     10002: require('../../../public/10002.png'),
@@ -45,40 +42,16 @@ const SearchScreen = () => {
   };
 
   const handleSearchInputChange = e => {
-    setSearchInput(e);
+    dispatch(setSearchInput(e));
   };
 
-  // 전략 패턴 사용
-  const searchStrategies = {
-    title: async (input: any) => {
-      const url = `http://10.210.148.205:8080/api/music/title?q=${input}`;
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error('Error:', error);
-        return [];
-      }
-    },
-    id: async (input: any) => {
-      const url = `http://10.210.148.205:8080/api/music/id?q=${input}`;
-
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error('Error:', error);
-        return [];
-      }
-    },
+  const handleSearch = () => {
+    dispatch(fetchMusicBySearchType({searchType, searchInput}));
   };
 
-  const handleSearch = async () => {
-    const results = await searchStrategies[searchType](searchInput);
-    setSearchResult(results);
-  };
+  useEffect(() => {
+    dispatch(fetchMusicBySearchType({searchType: searchType, searchInput: ''}));
+  }, [searchType, dispatch]);
 
   return (
     <MainContainer>
@@ -87,19 +60,27 @@ const SearchScreen = () => {
           label="노래 제목"
           value="title"
           selectedValue={searchType}
-          onValueChange={setSearchType}
-          isLast={true}
+          onPress={() => {
+            dispatch(setSearchType('title'));
+            dispatch(
+              fetchMusicBySearchType({searchType: 'title', searchInput: ''}),
+            );
+          }}
         />
         <RadioButton
           label="노래 번호"
           value="id"
           selectedValue={searchType}
-          onValueChange={setSearchType}
-          isLast={true}
+          onPress={() => {
+            dispatch(setSearchType('id'));
+            dispatch(
+              fetchMusicBySearchType({searchType: 'id', searchInput: ''}),
+            );
+          }}
         />
       </RadioButtonContainer>
       <SearchContainer>
-        <SeachBox
+        <SearchBox
           placeholder={
             searchType === 'title'
               ? '노래 제목을 입력하세요'
@@ -153,28 +134,12 @@ const SearchScreen = () => {
     </MainContainer>
   );
 };
+
 const RadioButtonContainer = styled.View`
   flex-direction: row;
   padding-vertical: ${deviceWidth * 0.05}px;
   padding-horizontal: ${deviceWidth * 0.05}px;
   margin-bottom: ${deviceWidth * 0.03}px;
-`;
-
-const RadioButtonWrapper = styled.TouchableOpacity`
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background-color: ${props => (props.selected ? '#FFB6C1' : 'transparent')};
-  padding-vertical: ${deviceWidth * 0.03}px;
-  padding-horizontal: ${deviceWidth * 0.02}px;
-  border-radius: ${deviceWidth * 0.02}px;
-  border: ${props => (props.selected ? '#FFB6C1' : '#FFB6C1')};
-  margin-right: ${deviceWidth * 0.02}px;
-`;
-const RadioButtonText = styled.Text`
-  font-size: ${deviceWidth * 0.04}px;
-  font-weight: ${props => (props.selected ? 800 : 500)};
-  color: ${props => (props.selected ? 'white' : 'black')};
 `;
 const SearchContainer = styled.View`
   width: ${deviceWidth * 0.9}px;
@@ -183,15 +148,6 @@ const SearchContainer = styled.View`
   align-self: center;
   margin-bottom: ${deviceWidth * 0.1}px;
   position: relative;
-`;
-const SeachBox = styled(TextInput)`
-  width: ${deviceWidth * 0.9}px;
-  height: ${deviceWidth * 0.12}px;
-  border-radius: ${deviceWidth * 0.02}px ${deviceWidth * 0}px
-    ${deviceWidth * 0}px ${deviceWidth * 0.02}px;
-  border-radius: ${deviceWidth * 0.02}px;
-  border: #ccc;
-  padding-horizontal: ${deviceWidth * 0.03}px;
 `;
 const SearchButton = styled.TouchableOpacity`
   position: absolute;
@@ -207,7 +163,6 @@ const SearchButtonText = styled.Text`
   font-size: ${deviceWidth * 0.04}px;
   text-align: center;
 `;
-
 const SearchResultContainer = styled.View`
   width: ${deviceWidth * 0.9}px;
   height: ${deviceWidth * 1.32}px;
@@ -256,4 +211,5 @@ const SearchedMusicDetailInfoText = styled.Text`
   font-weight: 600;
   color: white;
 `;
+
 export default SearchScreen;
