@@ -6,8 +6,8 @@ export const fetchMusic = createAsyncThunk(
   async (chartType: string) => {
     const url =
       chartType === 'popular'
-        ? 'http://10.210.148.205:8080/api/music/popular'
-        : 'http://10.210.148.205:8080/api/music';
+        ? 'http://localhost:8080/api/music/popular'
+        : 'http://localhost:8080/api/music';
     const response = await fetch(url);
     const json = await response.json();
     return json;

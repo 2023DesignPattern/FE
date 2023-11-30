@@ -10,7 +10,7 @@ export const fetchMusicBySearchType = createAsyncThunk(
     searchType: string;
     searchInput: string;
   }) => {
-    const url = `http://10.210.148.205:8080/api/music/${searchType}?q=${searchInput}`;
+    const url = `http://localhost:8080/api/music/${searchType}?q=${searchInput}`;
     const response = await fetch(url);
     const data = await response.json();
     return data;
@@ -33,13 +33,20 @@ const initialState: SearchState = {
 // 슬라이스 생성
 const searchSlice = createSlice({
   name: 'search',
-  initialState,
+  initialState: {
+    searchType: 'title',
+    searchInput: '',
+    searchResult: [],
+  },
   reducers: {
-    setSearchType: (state, action: PayloadAction<string>) => {
+    setSearchType: (state, action) => {
       state.searchType = action.payload;
     },
-    setSearchInput: (state, action: PayloadAction<string>) => {
+    setSearchInput: (state, action) => {
       state.searchInput = action.payload;
+    },
+    setSearchResult: (state, action) => {
+      state.searchResult = action.payload;
     },
   },
   extraReducers: builder => {

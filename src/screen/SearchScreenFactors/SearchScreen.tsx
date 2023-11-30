@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components/native';
 import {
   fetchMusicBySearchType,
+  setSearchInput,
   setSearchType,
 } from '../../features/search/searchSlice';
 import DeviceDimensions from '../../utils/DeviceDimensions';
